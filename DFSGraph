@@ -1,0 +1,48 @@
+import java.util.*;
+
+public class DFSGraph {
+    /* u-> it would represent the starting vertex and Map would represent the vertex and till where
+    it can go. Visited would represent the vertices which are visited before so that it does
+    not form cycle.
+    */
+    public static void DFS(int u, Map<Integer, List<Integer>> adj, boolean[] visited) {
+        if (visited[u]) {
+            return;
+        }
+        //mark the current node as visited
+        visited[u] = true;
+
+        //traverse the adjacency lits of the current node
+        for (int v : adj.getOrDefault(u, new ArrayList<>())) {
+            if (!visited[v]) {
+                DFS(v, adj, visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+
+        Map<Integer, List<Integer>> adj = new HashMap<>();
+
+        //Add edges
+        adj.put(0, Arrays.asList(1, 2));
+        adj.put(1, Arrays.asList(0, 3, 4));
+        adj.put(2, Arrays.asList(0, 4));
+        adj.put(3, Arrays.asList(1, 5));
+        adj.put(4, Arrays.asList(1, 2, 5));
+        adj.put(5, Arrays.asList(3, 4));
+
+        int n = 6; // number of nodes
+        boolean[] visited = new boolean[n];
+
+        //perform DFS starting from node 0
+        DFS(0, adj, visited);
+
+        //print visited nodes
+        System.out.println("Visited Nodes : ");
+        for (int i = 0; i < n; i++) {
+            System.out.println("Node " + i + ": " + visited[i]);
+        }
+
+    }
+}
