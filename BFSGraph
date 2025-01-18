@@ -1,0 +1,19 @@
+import java.util.*;
+
+public class BFSGraph {
+    public static void bfs(int u, Map<Integer, List<Integer>> adj, boolean[] visited) {
+        Queue<Integer> queue=new LinkedList<>();
+        queue.add(u);
+        visited[u]=true;
+
+        while(!queue.isEmpty()){
+            int x=queue.poll();
+
+            for(int v : adj.getOrDefault(x,new ArrayList<>())){
+                if(!visited[v]){
+                   visited[v]=true;
+                   queue.add(v);
+                }
+            }
+        }
+    }
