@@ -1,0 +1,43 @@
+
+//DFS for directed graph//
+
+import java.util.List;
+
+public class CyclicDirectedGraphDFS {
+    public boolean isCyclic(int V, List<Integer>[] adj) {
+        boolean[] visited=new boolean[V];
+        boolean [] inRecursion=new boolean[V];
+
+        //perform DFS on each node
+        for(int i=0;i<V;i++){
+            if(!visited[i]&& isCycleDFS(adj,i,visited,inRecursion)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isCycleDFS(List<Integer>[] adj, int u, boolean[] visited, boolean[] inRecursion) {
+        //mark the current node as visited
+        visited[u]=true;
+
+        //Mark the current node as part of recursion stack
+        inRecursion[u]=true;
+
+        //traverse all neighbors of the current node
+        for(int v : adj[u]){
+
+            //if the neighbor is not visited perform DFS
+            if(!visited[v] && isCycleDFS(adj,v,visited,inRecursion)){
+                return true;
+            }
+            //If the neighbor is already in the recursion stack, then there is a cycle.
+            else if(inRecursion[v]){
+                return true;
+            }
+        }
+        //Remove the current node from the recursion stack
+        inRecursion[u]=false;
+        return false;
+    }
+}
