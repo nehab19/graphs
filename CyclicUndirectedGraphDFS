@@ -1,0 +1,63 @@
+
+/** Undirected graph DFS **/
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class CyclicDFS {
+    public static boolean isCyclic(List<Integer>[] graph, int V) {
+        boolean[] visited = new boolean[V];
+        //check each component of graph
+        for (int i = 0; i < V; i++) {
+            if (isCycleUtil(graph, i, visited, -1)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private static boolean isCycleUtil(List<Integer>[] graph, int current, boolean[] visited, int parent) {
+        visited[current] = true;
+
+        for (int neighbor : graph[current]) {
+            if (neighbor == parent) {
+                //skip the edge to parent node and continue
+                continue;
+            }
+            if (visited[neighbor]) {
+                //if neighbor is already visited
+                return true;
+            }
+            if (isCycleUtil(graph, neighbor, visited, current)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int V = 5; // Number of vertices
+        List<Integer>[] graph = new ArrayList[V];
+
+        // Initialize adjacency list
+        for (int i = 0; i < V; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        // Add edges
+        graph[0].add(1);
+        graph[1].add(0);
+        graph[1].add(2);
+        graph[2].add(1);
+        graph[1].add(3);
+        graph[3].add(1);
+        graph[3].add(4);
+        graph[4].add(3);
+        graph[4].add(1); // This edge creates a cycle
+        graph[1].add(4);
+        boolean hasCycle = isCyclic(graph, V);
+
+        System.out.println("Does the graph contain a cycle? " + hasCycle);
+    }
+}
