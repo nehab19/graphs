@@ -1,0 +1,45 @@
+/** Undirected graph BFS **/
+
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
+public class CyclicBFS {
+    public boolean isCycle(int V, List<Integer>[] adj) {
+       int v= adj.length;
+        boolean[] visited = new boolean[V];
+
+        for (int i = 0; i < V; i++) {
+            if (!visited[i] && isCycleBFS(adj, V, i, visited)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private boolean isCycleBFS(List<Integer>[] graph, int v, int start, boolean[] visited) {
+        Queue<Pair> queue = new LinkedList<>();
+        //starting parent would be -1
+        queue.add(Pair.of(start, -1));
+        visited[start] = true;
+
+        while (!queue.isEmpty()) {
+            Pair current = queue.poll();
+            int currentNode = (int) current.getKey();
+            int parentNode = (int) current.getValue();
+
+            for (int neighbour : graph[currentNode]) {
+                if (!visited[neighbour]) {
+                    queue.add(Pair.of(neighbour, currentNode));
+                    visited[neighbour] = true;
+                } else if (neighbour != parentNode) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+}
