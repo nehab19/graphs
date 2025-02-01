@@ -1,0 +1,41 @@
+/** Leetcode link : https://leetcode.com/problems/is-graph-bipartite/ **/
+
+import java.util.Arrays;
+
+public class BipartiteGraph {
+
+    public boolean isBipartite(int[][] graph) {
+        int v = graph.length;
+        int[] color = new int[v];
+        Arrays.fill(color, -1);
+
+        for (int i = 0; i < v; i++) {
+            if (color[i] == -1) {
+                //lets say my current color is 1
+                checkBipartiteDFS(graph, i, color, 1);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkBipartiteDFS(int[][] graph, int currentNode, int[] color, int currentColor) {
+        color[currentNode] = currentColor;
+
+        //traverse the adjacent nodes
+        for (int v : graph[currentNode]) {
+            //where the same color is there for adjacent nodes
+            if (color[v] == color[currentNode]) {
+                return false;
+            }
+            //if the node is not visited
+            if (color[v] == -1) {
+                color[v] = 1 - currentColor;
+                if (!checkBipartiteDFS(graph, v, color, color[v])) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
