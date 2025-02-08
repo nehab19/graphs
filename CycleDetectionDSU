@@ -1,0 +1,56 @@
+
+
+import java.util.List;
+
+public class CycleDetectionDSU {
+    int[] parent;
+    int[] rank;
+
+    public CycleDetectionDSU(int V) {
+        parent = new int[V];
+        rank = new int[V];
+
+        for (int i = 0; i < V; i++) {
+            parent[i] = i;
+            rank[i] = 0;
+        }
+    }
+
+    private int find(int element) {
+        if (parent[element] != element) {
+            parent[element] = find(parent[element]);
+        }
+        return parent[element];
+    }
+
+    private void union(int x, int y) {
+        int xParent = find(x);
+        int yParent = find(y);
+
+        if (xParent != yParent) {
+            if (rank[xParent] > rank[yParent]) {
+                parent[yParent] = xParent;
+            } else if (rank[xParent] < rank[yParent]) {
+                parent[xParent] = yParent;
+            } else {
+                parent[xParent] = yParent;
+                rank[yParent]++;
+            }
+        }
+    }
+
+    public boolean detectCycle(int V, List<List<Integer>> adj) {
+        for (int u = 0; u < V; u++) {
+            for (int v : adj.get(u)) {
+                if (u < v) {
+                    if (find(u) == find(v)) {
+                        return true;
+                    } else {
+                        union(u, v);
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
